@@ -7,7 +7,7 @@ const moment = require('moment')
 const OAuth2 = google.auth.OAuth2;
 
 async function getCron() {
-    // type de requete axios a faitre
+    // type de requete axios a faire
     /* const requete = await axios({
         method: 'GET',
         url: 'http://localhost:8080/site/getAllSite'
@@ -21,7 +21,7 @@ async function getCron() {
     }][0]
 
     const now = moment().format('DD-MM-YYYY')
-    const fin_hebergement = moment(site.fin_hebergement).format('DD-MM-YYYY')
+    const fin_hebergement = moment(site.fin_hebergement).subtract(1, 'month').format('DD-MM-YYYY')
 
     if (now === fin_hebergement) {
 
