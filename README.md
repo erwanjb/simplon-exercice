@@ -1,68 +1,148 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Pour démarer le projet:
 
-In the project directory, you can run:
+il faut build avec :
+```sh
+npm run build
+```
+pour lancer seulement fe front :
+```sh
+npm run start
+```
+les variables d'environnement sont les suivantes:
 
-### `npm start`
+```js
+USER_DB // pour le user de la data base
+PASSWORD_DB //pour le mdp de la data base
+PORT_DB // pour le port de la data base
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+// pour se connecter à l'api google avec nodemailer pour le cron
+CLIENT_ID // id de l'api google
+CLIENT_SECRET // secret api
+TOKEN_REF // refresh token
+MAIL_TO // adresse mail de réception
+```
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+ensuite executer la commande suivante avec les variables d'environement :
+```sh
+node index
+```
 
-### `npm test`
+l'api est dans `server/route`
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## pour le get :
+```js
+// client
+'/client/getAllClient' // rien a spécifier
+'/client/getName/:id' // passer l'id pour avoir le nom du client
 
-### `npm run build`
+// site
+'/site/getAllSite' // rien a spécifier
+'/site/getSite/:id' // passer l'idpour avoir le client et son hébergement et relance les plus récentes
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+// relance
+'/relance/getAllRelance' // rien a spécifier
+'/relance/getRelance/:id' // passer l'id pour avair la relance
+```
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+## pour le post : 
+```js
+// client
+'/client/addClient' 
+/* envoyer le body avec : 
+client : {
+    name_client: 'string'
+} */
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+// site
+'/site/addSite' 
+/* envoyer le body avec: 
+site : {
+    id_client: 'number',
+    name_sitet: 'string',
+    url_site: 'string'
+    cp_site: 'string',
+    debut_hebergement: 'YYYY-MM-DD',
+    fin_hebergement: 'YYYY-MM-DD',
+    date_relance: 'YYYY-MM-DD'/ optionel
+} */
 
-### `npm run eject`
+// relance
+'/relance/addRelance' 
+/* envoyer le body avec : 
+relance : {
+    id_site: 'number',
+    date_relance: 'YYYY-MM-DD'
+} */
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## pour le update : 
+```js
+// client
+'/client/updateClient' 
+/* envoyer le body avec : 
+client : {
+    id_client: 'number',
+    name_client: 'string'
+} */
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+// site
+'/site/updateSite' 
+/* envoyer le body avec: 
+site : {
+    id_site: 'number',
+    id_client: 'number',
+    name_sitet: 'string',
+    url_site: 'string'
+    cp_site: 'string',
+    debut_hebergement: 'YYYY-MM-DD',
+    fin_hebergement: 'YYYY-MM-DD',
+    date_relance: 'YYYY-MM-DD'/ optionel
+} */
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+// relance
+'/relance/updateRelance' 
+/* envoyer le body avec : 
+relance : {
+    id_relance: 'number',
+    id_site: 'number',
+    date_relance: 'YYYY-MM-DD'
+} */
+```
+## pour le delete :
+```js
+// client
+'/client/deleteClient/:id' // passer l'id pour supprimer le client et tout ce qui lui est rattaché
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+// site
+'/site/deleteSite/:id' // passer l'id pour supprimer le site et tout ce qui lui est rattaché
 
-## Learn More
+// relance
+'/relance/deleteRelance/:id' // passer l'id pour supprimer la relance et tout ce qui lui est rattaché
+```
+## Autre
+pour avoir tous les hébergements d'un client :
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```js
+'/client/getHebergement/:id' // passer l'id client
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+pour avoir tous les relances d'un client :
 
-### Code Splitting
+```js
+'/client/getRelance/:id' // passer l'id client
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
 
-### Analyzing the Bundle Size
+## Pour la BDD :
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+j'ai 4 tables:
+- client
+- site (liée a client)
+- hebergement (liée à site)
+- relance (liée à site)
 
-### Making a Progressive Web App
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+## CRON
+le cron est dans server/cron.js
