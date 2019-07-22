@@ -9,7 +9,7 @@ const getCron = require('./cron')
 const history = require('connect-history-api-fallback')
 
 app.use(history())
-app.use(express.static('build'))
+app.use('/', express.static('build'))
 // tous les jours à 15h
 const job = new CronJob('0 0 15 * * *', getCron);
 job.start();
